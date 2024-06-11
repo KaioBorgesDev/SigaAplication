@@ -28,7 +28,7 @@ const Login = ({ onLoginSuccess }) => {
      
       const session = response.data.session_id;
       if (response.data.message) {
-        alert("Sessao iniciada.")
+        alert("Bem Vindo","Sessao iniciada.")
         onLoginSuccess(session);   
       } else {
         

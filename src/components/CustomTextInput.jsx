@@ -13,6 +13,7 @@ const CustomTextInput = ({ label, value, onChangeText, placeholder, security}) =
         onChangeText={onChangeText}
         secureTextEntry={security}
       />
+
     </View>
   );
 };
@@ -26,6 +27,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   input: {
+    color: 'white',
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
