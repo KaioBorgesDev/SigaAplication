@@ -11,7 +11,6 @@ import CustomTextInput from '@/src/components/CustomTextInput';
 const Login = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  var cors = require('cors')
   const handleLogin = async () => {
     try {
       
@@ -19,24 +18,24 @@ const Login = ({ onLoginSuccess }) => {
       formData.append('id', username); // Se o nome de usuário for o ID, ajuste aqui
       formData.append('password', password);
       
-      const response = await axios.post('http://localhost:80/api/session/create', formData, {
+      const response = await axios.post('http://192.168.1.5:80/api/session/create', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': 'Bearer d6ae5d9bcb7e4885517c3f60cf11da66',
         },
         
       });
-      console.log("Sucesso 3");
-  
-      if (response.data.session) {
-        console.log("Sucesso 1");
-        Alert.alert("Sucesso.");
-        onLoginSuccess(response.data.session);
+     
+      const session = response.data.session_id;
+      if (response.data.message) {
+        alert("Sessao iniciada.")
+        onLoginSuccess(session);   
       } else {
-        Alert.alert('Erro', 'Não foi possível te achar. Verifique seus dados.');
+        
+        alert('Erro', 'Não foi possível te achar. Verifique seus dados.');
       }
     } catch (error) {
-      Alert.alert('Erro 500', 'Login mal sucedido, tente novamente mais tarde.');
+      alert('Erro 500', 'Login mal sucedido, tente novamente mais tarde.');
     }
   };
 
@@ -53,19 +52,19 @@ const Login = ({ onLoginSuccess }) => {
         placeholder="Somente números."
         value={username}
         onChangeText={setUsername}
-        secureTextEntry={false}
+        security={false}
       />
       <CustomTextInput
         label="Senha"
         placeholder="Sua senha."
         value={password}
         onChangeText={setPassword}
-        secureTextEntry={true}
-
+        security = {true}
       />
       <TouchableOpacity style={styles.button} onPressIn={handleLogin} >
         <Text style={styles.buttonText}>Entrar</Text>
       </TouchableOpacity>
+      
     </ParallaxScrollView>
   );
 };
@@ -79,7 +78,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flexDirection: 'row',
-    gap: 8,
+    gap: 8
   },
   text: {
     fontSize: 18,
