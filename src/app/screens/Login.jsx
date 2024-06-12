@@ -6,19 +6,22 @@ import ParallaxScrollView from '@/src/components/ParallaxScrollView';
 import { ThemedText } from '@/src/components/ThemedText'; 
 import { ThemedView } from '@/src/components/ThemedView'; 
 import CustomTextInput from '@/src/components/CustomTextInput';
+import useStorage from '../../../hooks/useAsyncStorage';
 
 
 const Login = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const {saveItem, getItem} = useStorage;
+
   const handleLogin = async () => {
+
     try {
-      
       const formData = new FormData();
       formData.append('id', username); // Se o nome de usuário for o ID, ajuste aqui
       formData.append('password', password);
       
-      const response = await axios.post('http://192.168.1.5:80/api/session/create', formData, {
+      const response = await axios.post('https://sigafatec-69528b450886.herokuapp.com/api/session/create', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': 'Bearer d6ae5d9bcb7e4885517c3f60cf11da66',
@@ -27,15 +30,20 @@ const Login = ({ onLoginSuccess }) => {
       });
      
       const session = response.data.session_id;
-      if (response.data.message) {
-        alert("Bem Vindo","Sessao iniciada.")
+
+
+      if (session) {
+        alert("Sessao Iniciada" + ": Token " + session)
+        await saveItem("@session", session)
         onLoginSuccess(session);   
+
+        alert(getItem("@session"))
       } else {
-        
-        alert('Erro', 'Não foi possível te achar. Verifique seus dados.');
+
+        alert('Erro, Não foi possível te achar. Verifique seus dados.');
       }
     } catch (error) {
-      alert('Erro 500', 'Login mal sucedido, tente novamente mais tarde.');
+      alert('Login mal sucedido, tente novamente mais tarde. Erro: ' + error);
     }
   };
 
